@@ -1,0 +1,22 @@
+[
+    {"role": "User", "content": "Build a basic Flask app."},
+    {"role": "Assistant", "content": "`pip install flask`"},
+    {"role": "User", "content": "--next"},
+    {"role": "Assistant", "content": "`mkdir basic_flask_app`"},
+    {"role": "User", "content": "--next"},
+    {"role": "Assistant", "content": "`cat << 'EOF' > basic_flask_app/app.py...`"},
+    {"role": "User", "content": "--next"},
+    {"role": "Assistant", "content": "`cat << EOF > basic_flask_app/templates/index.html...`"},
+    {"role": "User", "content": "--next"},
+    {"role": "Assistant", "content": "`cat << 'EOF' > basic_flask_app/templates/about.html...`"},
+    {"role": "User", "content": "--next"},
+    {"role": "Assistant", "content": "`python basic_flask_app/app.py`"},
+    {"role": "User", "content": "--next"},
+    {"role": "Assistant", "content": "--done"},
+    {"role": "User", "content": "List my current directory"},
+    {"role": "Assistant", "content": "`ls`"},
+    {"role": "User", "content": "--next"},
+    {"role": "Assistant", "content": "--done"},
+    {"role": "User", "content": "Create a basic React app"},
+    {"role": "Assistant", "content": "`npx create-react-app basic-app`"}
+]
