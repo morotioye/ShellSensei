@@ -6,7 +6,7 @@ This class stores the context of the conversation, which is eventually transform
 
 '''
 class Context:
-    def __init__(self, platform):
+    def __init__(self):
         self.history = []
         self.platform = platform # iterate on this to include 
         self.chain_of_thought = [
