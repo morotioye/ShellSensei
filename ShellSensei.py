@@ -8,11 +8,23 @@ from langchain.agents import Tool, AgentType, initialize_agent
 from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
 
+'''
+TODO
+
+    - Add usage (https://python.langchain.com/docs/modules/model_io/models/llms/how_to/token_usage_tracking) -- maybe add tool for showing usage when prompted? 
+        could do a flow like --- "User: -u" , "Chatbot: Tokens, Cost($), etc."
+    - Configure Autorun functionality to bypss Y/n sequence
+    - Configure conversation-loading (ability to load conversation from file 
+    - add more init parameters to make more configurable (verbose to log thought process [now false by default]
+            max_iterations to limit number of iterations [now 5 by default], memory to load conversation from file [now None by default])
+
+'''
 
 class ShellSensei:
-    def __init__(self, model="gpt-4", temperature=0.5):
+    def __init__(self, model="gpt-4", temperature=0.5, verbose=False):
         load_dotenv(find_dotenv())
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
+        self.verbose = verbose
         self.term_gpt = ChatOpenAI(model=model, temperature=temperature)
         self.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=False)
         self.system_message = open("HyperParams/system_message.txt", "r").read()
@@ -48,7 +60,7 @@ class ShellSensei:
             agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION,
             tools=self.tools,
             llm=self.term_gpt,
-            verbose=True,
+            verbose=self.verbose,
             max_iterations=5,
             memory=self.memory
         )
