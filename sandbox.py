@@ -1,14 +1,11 @@
 # testing LangChain implementation
 import subprocess
-import json
 from sys import platform
 import os 
 from langchain.chat_models import ChatOpenAI
 from langchain.agents import Tool
 from langchain.agents import AgentType
-from HyperParams.Context import Context
 from dotenv import load_dotenv, find_dotenv
-from HyperParams.Context import Context
 from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
 from langchain.agents import initialize_agent
@@ -17,15 +14,16 @@ from langchain.agents import initialize_agent
 # Load env variables
 load_dotenv(find_dotenv())
 openai_api_key = os.getenv("OPENAI_API_KEY")
-context = Context("HyperParams/history.json")
 
 # Init ChatModel
 term_gpt = ChatOpenAI(model="gpt-4", temperature=0.5)
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=False) # will return history
 
+# Retrieve system message
+system_message = open("HyperParams/system_message.txt", "r").read()
 
 
-
+# Run command method
 def run_command(text: str):
     try:
         command_output = subprocess.check_output(text, shell=True, stderr=subprocess.STDOUT)
@@ -34,7 +32,7 @@ def run_command(text: str):
         return f"Error: {e.output.decode('utf-8')}"
 
 
-
+# Command executor definition & tool init
 command_executor = Tool(
         name="command-executor",
         func=run_command,
@@ -43,6 +41,7 @@ command_executor = Tool(
     )
 
 tools = [command_executor]
+
 
 # Init prompt template
 '''
@@ -55,7 +54,7 @@ Template Schema:
 
 '''
 
-template = context.system_message + "\n\nYou are running on {platform}. \n\nHuman: {human_input}\nChatbot:"
+template = system_message + "\n\nYou are running on {platform}. \n\nHuman: {human_input}\nChatbot:"
 
 prompt = PromptTemplate(
     input_variables=["human_input", "platform"],
