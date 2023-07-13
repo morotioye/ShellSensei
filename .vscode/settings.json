@@ -1,7 +1,0 @@
-{
-    "python.analysis.extraPaths": [
-        "./HyperParams",
-        "./Stats",
-        "./Models"
-    ]
-}
