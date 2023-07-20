@@ -1,5 +1,4 @@
-import os
-import subprocess
+import os, subprocess, socket
 from sys import platform
 from dotenv import load_dotenv, find_dotenv
 
@@ -21,6 +20,9 @@ TODO
 '''
 
 class ShellSensei:
+    price = 0.0
+    coins = 0
+    hostName = socket.gethostname()
     def __init__(self, model="gpt-4", temperature=0.5, verbose=False):
         load_dotenv(find_dotenv())
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -67,5 +69,14 @@ class ShellSensei:
 
     def interact(self):
         while True:
-            query = input("You: ")
-            print(self.agent(self.template.format(human_input=query, platform=platform))["output"])
+            query = input(f"{ShellSensei.hostName}: ")
+            with get_openai_callback() as cb:
+                if query.__contains__('cost'):
+                    print("Total Price: " + str(ShellSensei.price))
+                elif query.__contains__('tokens'):
+                    print("Total Tokens: " + str(ShellSensei.coins))
+                else :
+                    print(self.agent(self.template.format(human_input=query, platform=platform))["output"])
+                    ShellSensei.coins += cb.prompt_tokens
+                    ShellSensei.price = cb.total_cost
+
