@@ -78,5 +78,5 @@ class ShellSensei:
                 else :
                     print(self.agent(self.template.format(human_input=query, platform=platform))["output"])
                     ShellSensei.coins += cb.prompt_tokens
-                    ShellSensei.price = cb.total_cost
+                    ShellSensei.price += cb.total_cost
 
